@@ -16,7 +16,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Projectt::select("id","title", "description", "slug", "url")->paginate(6);    
+        $projects = Projectt::select("id","title", "description", "slug", "url", "type_id")->with('type', 'technologies')->paginate(6);    
             return response()->json($projects);
         
     }
@@ -27,9 +27,14 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      ** @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function show($slug)
     {
-        //
+        $project = Projectt::select("id","title", "description", "slug", "url", "type_id")
+            ->where('slug', $slug)
+            ->with('type', 'technologies')
+            ->first();
+        return response()->json($project);
     }
+}
 
-   }
+   
